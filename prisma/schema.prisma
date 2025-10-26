@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Device {
+  id        Int      @id @default(autoincrement())
+  deviceId  String   @unique
+  label     String?
+  room      String?
+  createdAt DateTime @default(now())
+  readings  Reading[]
+}
+
+model Reading {
+  id        Int      @id @default(autoincrement())
+  device    Device   @relation(fields: [deviceIdRef], references: [id])
+  deviceIdRef Int
+  ts        DateTime @default(now())
+  type      String
+  value     Float
+}
